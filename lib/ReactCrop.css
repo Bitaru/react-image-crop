@@ -1,0 +1,261 @@
+:root {
+	--marching-ants-colour: rgba(255,255,255,0.7);
+	--marching-ants-alt-colour: rgba(0,0,0,0.7);
+
+	--drag-handle-width: 9px;
+	--drag-handle-height: 9px;
+	--drag-handle-background-colour: rgba(0,0,0,0.2);
+	--drag-handle-border: 1px solid rgba(255,255,255,0.7);
+
+	--drag-bar-size: 6px;
+
+	--cropped-area-overlay-color: rgba(0,0,0,0.6);
+	--drag-handle-mobile-width: 16px;
+	--drag-handle-mobile-height: 16px;
+	--drag-bar-mobile-size: 16px;
+}
+
+
+@custom-media --small-viewport (max-width: 768px);
+
+.ReactCrop {
+	position: relative;
+	display: inline-block;
+	cursor: crosshair;
+	overflow: hidden;
+	&:focus {
+		outline: none;
+	}
+}
+
+.Image {
+	display: block;
+}
+.ImageCopy {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.CropWrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: var(--cropped-area-overlay-color);
+}
+
+.CropSelection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: translate3d(0,0,0);
+	box-sizing: border-box;
+	cursor: move;
+	margin: 0;
+
+	background-image:
+		linear-gradient(to right, var(--marching-ants-colour) 50%, var(--marching-ants-alt-colour) 50%),
+		linear-gradient(to right, var(--marching-ants-colour) 50%, var(--marching-ants-alt-colour) 50%),
+		linear-gradient(to bottom, var(--marching-ants-colour) 50%, var(--marching-ants-alt-colour) 50%),
+		linear-gradient(to bottom, var(--marching-ants-colour) 50%, var(--marching-ants-alt-colour) 50%);
+	padding: 1px;
+	background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
+	background-position: 0 0, 0 100%, 0 0, 100% 0;
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	animation: marching-ants 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-play-state: running;
+}
+
+@keyframes marching-ants {
+	0% {
+		background-position: 0 0,  0 100%,  0 0,  100% 0;
+	}
+
+	100% {
+		background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px;
+	}
+}
+
+.DragHandle {
+	position: absolute;
+	width: var(--drag-handle-width);
+	height: var(--drag-handle-height);
+	background-color: var(--drag-handle-background-colour);
+	border: var(--drag-handle-border);
+	box-sizing: border-box;
+	outline: 1px solid transparent;
+}
+
+.ReactCrop {
+	& .ordNW {
+		top: 0;
+		left: 0;
+		margin-top: -4px;
+		margin-left: -4px;
+		cursor: nw-resize;
+	}
+	& .ordN {
+		top: 0;
+		left: 50%;
+		margin-top: -4px;
+		margin-left: -4px;
+		cursor: n-resize;
+	}
+	& .ordNE {
+		top: 0;
+		right: 0;
+		margin-top: -4px;
+		margin-right: -4px;
+		cursor: ne-resize;
+	}
+	& .ordE {
+		top: 50%;
+		right: 0;
+		margin-top: -4px;
+		margin-right: -4px;
+		cursor: e-resize;
+	}
+	& .ordSE {
+		bottom: 0;
+		right: 0;
+		margin-bottom: -4px;
+		margin-right: -4px;
+		cursor: se-resize;
+	}
+	& .ordS {
+		bottom: 0;
+		left: 50%;
+		margin-bottom: -4px;
+		margin-left: -4px;
+		cursor: s-resize;
+	}
+	& .ordSW {
+		bottom: 0;
+		left: 0;
+		margin-bottom: -4px;
+		margin-left: -4px;
+		cursor: sw-resize;
+	}
+	& .ordW {
+		top: 50%;
+		left: 0;
+		margin-top: -4px;
+		margin-left: -4px;
+		cursor: w-resize;
+	}
+}
+
+.DragBar {
+	position: absolute;
+	&.ordN {
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 6px;
+		margin-top: -4px;
+	}
+	&.ordE {
+		right: 0;
+		top: 0;
+		width: 6px;
+		height: 100%;
+		margin-right: -4px;
+	}
+	&.ordS {
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 6px;
+		margin-bottom: -4px;
+	}
+	&.ordW {
+		top: 0;
+		left: 0;
+		width: 6px;
+		height: 100%;
+		margin-left: -4px;
+	}
+}
+
+.NewCrop {
+	.DragBar,
+	.DragHandle {
+		display: none;
+	}
+}
+
+.FixedAspect {
+	& .DragHandle{
+		&.ordN, &.ordE, &.ordS, &.ordW{
+			display: none;
+		}
+	}
+	& .DragBar{
+		display: none;
+	}
+}
+
+@media (--small-viewport) {
+	.DragHandle {
+		width: 6px;
+		height: 6px;
+	}
+
+	.ReactCrop {
+		& .ordNW {
+			margin-top: -3px;
+			margin-left: -3px;
+		}
+	  & .ordN {
+			margin-top: -3px;
+			margin-left: -3px;
+		}
+		& .ordNE {
+			margin-top: -3px;
+			margin-right: -3px;
+		}
+		& .ordE {
+			margin-top: -3px;
+			margin-right: -3px;
+		}
+		& .ordSE {
+			margin-bottom: -3px;
+			margin-right: -3px;
+		}
+		& .ordS {
+			margin-bottom: -3px;
+			margin-left: -3px;
+		}
+		& .ordSW {
+			margin-bottom: -3px;
+			margin-left: -3px;
+		}
+		& .ordW {
+			margin-top: -3px;
+			margin-left: -3px;
+		}
+	}
+
+	.DragBar{
+		&.ordN {
+			height: 6px;
+			margin-top: -4px;
+		}
+		&.ordE {
+			width: 6px;
+			margin-right: -4px;
+		}
+		&.ordS {
+			height: 6px;
+			margin-bottom: -4px;
+		}
+		&.ordW {
+			width: 6px;
+			margin-left: -4px);
+		}
+	}
+}
